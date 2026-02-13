@@ -312,16 +312,10 @@
         const puzzles = [
             {
                 question: 'Recreate our first fight which we concluded with a selfie',
-                tileFor(piece) {
-                    return `images/tile-${piece}.png`;
-                },
                 fullImage: 'images/full-image.png'
             },
             {
                 question: 'Recreate the time you saw me the most drunk.',
-                tileFor(piece) {
-                    return `images/tile-${piece}-2.png`;
-                },
                 fullImage: 'images/full-image-2.png'
             }
         ];
@@ -374,7 +368,7 @@
                     tile.classList.add('empty');
                     tile.disabled = true;
                 } else {
-                    tile.style.backgroundImage = `url('${puzzle.tileFor(piece)}')`;
+                    setTileBackground(tile, puzzle.fullImage, piece);
                     tile.addEventListener('click', () => moveTile(index));
                 }
 
@@ -408,7 +402,7 @@
 
             const emptyTile = puzzleGrid.querySelector('.puzzle-tile.empty');
             if (emptyTile) {
-                emptyTile.style.backgroundImage = `url('${puzzle.tileFor(EMPTY_PIECE)}')`;
+                setTileBackground(emptyTile, puzzle.fullImage, EMPTY_PIECE);
             }
 
             nextPuzzleBtn.style.display = 'inline-block';
@@ -423,6 +417,16 @@
             scramblePuzzle();
             renderPuzzle();
             showScreen('puzzle');
+        }
+
+        function setTileBackground(tile, fullImagePath, piece) {
+            const pieceIndex = piece - 1;
+            const row = Math.floor(pieceIndex / 3);
+            const col = pieceIndex % 3;
+            tile.style.backgroundImage = `url('${fullImagePath}')`;
+            tile.style.backgroundSize = '300% 300%';
+            tile.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
+            tile.style.backgroundRepeat = 'no-repeat';
         }
 
         function toFinalScreen() {
